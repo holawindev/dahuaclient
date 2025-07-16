@@ -1,0 +1,291 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : DahuaAPIClient
+ major_version : 30
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+ options : 256
+class :
+ identifier : 0x187812bd00081e46
+ internal_properties : HwAAAB4AAAD+1kTo6KJy2WQU0Y4fbFD6aQ7NWfD4KKkN7Ml67nIqLXIRxJ1vjfJ1
+ code_elements :
+  type_code : 10
+  p_codes :
+   -
+     code : |1+
+      //!
+      //! @brief Clase cliente para consumir API CGI de cámaras Dahua - Método getSummary únicamente
+      //!
+      //! @note Esta clase implementa únicamente el método getSummary del endpoint videoStatServer.cgi
+      //! de la API CGI de Dahua para obtener estadísticas de conteo de personas.
+      //! Requiere WinDev 2025 SaaS Update 3 o superior para soporte de HTTP Digest Authentication.
+      //! Diseñada siguiendo principio KISS para implementación rápida y confiable.
+      //! Desarrollador: Juan (InnIT) - Julio 2025
+      //!
+      
+      DahuaAPIClient is a Class
+      // Propiedades privadas para conexión
+      private
+      	m_sServerIP	is string				= ""
+      	m_sUsername	is string				= ""
+      end
+      
+      //!
+      //! @brief Estructura para almacenar datos de estadísticas de conteo de personas
+      //!
+      //! @note Campos de la estructura stSummary:
+      //! - Channel: Número de canal consultado (int, 0 = error/no data)
+      //! - RuleName: Tipo de regla ("NumberStat" para entrada/salida, "ManNumDetection" para conteo)
+      //! - TotalEntradas: Contador total histórico de entradas
+      //! - EntradasHoy: Entradas del día actual (se resetea a medianoche)
+      //! - EntradasEstaHora: Entradas de la hora actual
+      //! - TotalSalidas: Contador total histórico de salidas
+      //! - SalidasHoy: Salidas del día actual (se resetea a medianoche)
+      //! - SalidasEstaHora: Salidas de la hora actual
+      //! - PersonasAdentro: Cantidad actual de personas en área monitoreada
+      //!
+      //! Todos los campos numéricos inicializan en 0, RuleName en string vacío.
+      //! Los contadores "Hoy" y "EstaHora" dependen del reloj interno de la cámara.
+      //!
+      stSummary is Structure
+      	Channel				is int
+      	RuleName			is string
+      	TotalEntradas		is int
+      	EntradasHoy			is int
+      	EntradasEstaHora	is int
+      	TotalSalidas		is int
+      	SalidasHoy			is int
+      	SalidasEstaHora		is int
+      	PersonasAdentro		is int
+      end
+     type : 131072
+  procedures :
+   -
+     name : Constructor
+     procedure_id : 1763179857074265670
+     type_code : 27
+     code : |1+
+      //!
+      //! @brief Constructor de la clase DahuaAPIClient
+      //!
+      //! @param sServerIP (ANSI string)  <indique aquí la finalidad de sServerIP>
+      //! @param sUsername (ANSI string)  <indique aquí la finalidad de sUsername>
+      //!
+      //! @note Descripción de los parámetros de entrada/salida de 'Constructor':
+      //! Descripción de los parámetros de entrada/salida de 'Constructor':
+      //! Descripción de los parámetros de entrada/salida de 'Constructor':
+      //! Descripción de los parámetros de entrada de 'Constructor':
+      //! - sServerIP: Dirección IP de la cámara Dahua (ej: "192.168.1.100")
+      //! - sUsername: Usuario para autenticación (ej: "admin")
+      //! - sPassword: Contraseña para autenticación
+      //! Inicializa las credenciales de conexión. No valida la conectividad en este punto.
+      //! Las credenciales se almacenan en propiedades privadas para uso posterior.
+      //! No hay límites en los valores de entrada, la validación se realiza en GetSummary().
+      //! El desarrollador (JBARBAT) no ha introducido ninguna documentación
+      //!
+      
+      procédure Constructor(sServerIP is string, sUsername is string)
+      m_sServerIP	= sServerIP
+      m_sUsername	= sUsername
+      
+     type : 589824
+   -
+     name : Destructor
+     procedure_id : 1763179857074331206
+     type_code : 28
+     code : |1+
+      procedure Destructor()
+      
+     type : 655360
+   -
+     name : GetSummary
+     procedure_id : 1763180093297652772
+     type_code : 12
+     code : |1+
+      //!
+      //! @brief Obtiene estadísticas de conteo de personas desde cámara Dahua
+      //!
+      //! @param nChannel (int - valor predeterminado=1) Número de canal de video
+      //! @param bSaveJSON (boolean - valor predeterminado=False) Si True, guarda JSON en C:\Temp
+      //!
+      //! @note Descripción de los parámetros de entrada/salida de 'GetSummary':
+      //! Parámetros de entrada:
+      //! - nChannel: Número de canal de video (entero, valor por defecto = 1, debe ser >= 1)
+      //! - bSaveJSON: Si True, guarda archivo JSON con timestamp en C:\Temp
+      //!
+      
+      procédure GetSummary(nChannel is int = 1, bSaveJSON is boolean = False) : stSummary
+      
+      stResult	is stSummary
+      myRequest	is httpRequest
+      myResponse	is httpResponse
+      sURL		is string
+      
+      // Construir URL
+      sURL						= StringBuild("http://%1/cgi-bin/videoStatServer.cgi?action=getSummary&channel=%2", m_sServerIP, nChannel)
+      
+      // Configurar request
+      myRequest.Method			= httpGet
+      myRequest.URL				= sURL
+      myRequest.User				= m_sUsername
+      myRequest.Password			= CameraPassword
+      myRequest.Authentication	= auDigest
+      myRequest.Timeout			= 30000 // 30 segundos
+      
+      // Ejecutar
+      myResponse					= myRequest.Send()
+      
+      // Verificar errores
+      if ErrorOccurred or myResponse.StatusCode <> 200 then
+      	return stResult // Estructura vacía
+      end
+      
+      // Parsear y retornar
+      s_Content is ANSI string = myResponse.Content
+      stResult = ParseResponse(s_Content)
+      
+      // Guardar JSON si se solicita
+      if bSaveJSON then
+      	SaveToJSON(stResult, nChannel)
+      end
+      
+      return stResult
+      
+     type : 458752
+   -
+     name : ParseResponse
+     procedure_id : 1763180754722639987
+     type_code : 12
+     code : |1+
+      //!
+      //! @brief Parsea la respuesta HTTP del endpoint videoStatServer.cgi
+      //!
+      //! @param sContent (ANSI string) Contenido HTTP de respuesta en formato key=value
+      //!
+      //! @note Descripción de los parámetros de entrada/salida de 'ParseResponse':
+      //! Parámetro de entrada:
+      //! - sContent: Contenido HTTP de respuesta en formato key=value (string)
+      //!
+      
+      procédure private ParseResponse(sContent is ANSI string) : stSummary
+      
+      stResult	is stSummary
+      sLine		is string
+      arrLines	is array of strings
+      nI			is int
+      
+      arrLines = sContent.Split(CR)
+      
+      for nI = 1 _to_ arrLines.Count
+      	sLine = arrLines[nI].NoSpace(sscAll)
+      
+      	// Campos principales
+      	if sLine [= "summary.Channel=" then
+      		stResult.Channel = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	if sLine [= "summary.RuleName=" then
+      		stResult.RuleName = sLine.ExtractString(2, "=")
+      	end
+      
+      	// Entradas
+      	if sLine [= "summary.EnteredSubtotal.Total=" then
+      		stResult.TotalEntradas = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	if sLine [= "summary.EnteredSubtotal.Today=" then
+      		stResult.EntradasHoy = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	if sLine [= "summary.EnteredSubtotal.Hour=" then
+      		stResult.EntradasEstaHora = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	// Salidas
+      	if sLine [= "summary.ExitedSubtotal.Total=" then
+      		stResult.TotalSalidas = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	if sLine [= "summary.ExitedSubtotal.Today=" then
+      		stResult.SalidasHoy = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	if sLine [= "summary.ExitedSubtotal.Hour=" then
+      		stResult.SalidasEstaHora = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      	// Personas adentro
+      	if sLine [= "summary.InsideSubtotal.Total=" then
+      		stResult.PersonasAdentro = Val(sLine.ExtractString(2, "="))
+      	end
+      
+      end
+      
+      return stResult
+      
+      
+     type : 458752
+   -
+     name : SaveToJSON
+     procedure_id : 1763183932998523761
+     type_code : 12
+     code : |1+
+      //!
+      //! @brief Guarda los datos de summary en archivo JSON con timestamp
+      //!
+      //! @param stData (stSummary) Estructura con datos a guardar
+      //! @param nChannel (int) Canal consultado para incluir en filename
+      //!
+      //! @note Crea archivo JSON en C:\Temp con formato:
+      //! dahua_summary_canal[X]_YYYYMMDD_HHMMSS.json
+      //! Si C:\Temp no existe, no hace nada. Si falla el guardado, ignora el error.
+      //!
+      
+      procédure private SaveToJSON(stData is stSummary, nChannel is int)
+      
+      sFileName		is string
+      sFilePath		is string
+      jData			is JSON
+      dtNow			is datetime = SysDateTime()
+      
+      // Verificar que C:\Temp exista
+      if not fDirectoryExist("C:\Temp") then
+      	Error("El directorio C:\Temp no existe.","Cree el directorio C:\Temp y vuelva a ejecutar el exe.")
+      	return
+      end
+      
+      // Construir nombre archivo
+      sFileName					= StringBuild("dahua_summary_canal%1_%2.json", nChannel, dtNow)
+      sFilePath					= "C:\Temp\" + sFileName
+      
+      // Construir JSON usando variable json
+      jData.timestamp				= dtNow
+      jData.server_ip				= m_sServerIP
+      jData.channel				= stData.Channel
+      jData.rule_name				= stData.RuleName
+      jData.total_entradas		= stData.TotalEntradas
+      jData.entradas_hoy			= stData.EntradasHoy
+      jData.entradas_esta_hora	= stData.EntradasEstaHora
+      jData.total_salidas			= stData.TotalSalidas
+      jData.salidas_hoy			= stData.SalidasHoy
+      jData.salidas_esta_hora		= stData.SalidasEstaHora
+      jData.personas_adentro		= stData.PersonasAdentro
+      
+      // Guardar archivo (si falla, no hacer nada)
+      fSaveText(sFilePath, jData)
+      
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : HwAAAB4AAAB7MB8NZB5rGUbyk77+IjQnJ74vm430Ar3yq0zmP05sGBBw0ur17uG6ZWry
+  original_name : Clase1
+resources :
+ string_res :
+  identifier : 0x187812bb00051770
+  internal_properties : HwAAAB4AAAA809Qj/IAi+r8QXyrnW7sarQeYORCUjKBkmMeTFexSj5AuvTfTUpN0Eg==
+custom_note :
+ internal_properties : HwAAAB4AAADnl3uxgA6ylw4vtqUKEOJQD3VAAOKeNUmhPNojcRFoDpHEcUyYAw==
