@@ -1,22 +1,22 @@
 # 📷 DahuaClient – Integración con cámaras Dahua vía API CGI (Digest Auth)
 
-Este proyecto implementa un cliente en **WinDev 2025 SaaS Update 3** para conectarse a cámaras Dahua IP que soportan **API CGI** y recuperar datos de **conteo de personas** mediante **autenticación HTTP Digest**.
+**DahuaClient** es un cliente escrito en **WinDev 2025 SaaS Update 3** para integrarse con cámaras IP Dahua (como la `DH-IPC-HDBW5541R-ASE`) usando su API CGI, permitiendo acceder a datos en tiempo real de **conteo de personas** mediante **autenticación HTTP Digest**.
 
 ---
 
 ## 🎯 Objetivo
 
-Obtener estadísticas en tiempo real (entradas, salidas y personas presentes) desde cámaras Dahua, utilizando la función `getSummary` de su API CGI.
+Consultar el resumen estadístico de entradas, salidas y personas presentes desde el endpoint `getSummary` de la API CGI Dahua, cumpliendo con el protocolo de autenticación RFC 7616.
 
 ---
 
 ## 🛠️ Tecnologías utilizadas
 
-- 🔧 **WinDev 2025 SaaS Update 3** (requerido por `httpRequest.Authentication = auDigest`)
-- 🌐 HTTP Digest Auth (RFC 7616)
-- 📷 Cámara Dahua `DH-IPC-HDBW5541R-ASE`
-- 🧠 Diseño modular: clase `DahuaAPIClient`
-- 🗂 Guardado opcional en JSON (`C:\Temp\dahua_summary_canalX_fecha.json`)
+- **WinDev 2025 SaaS Update 3** (necesario para `httpRequest.Authentication = auDigest`)
+- HTTP Digest Auth (RFC 7616)
+- Cámara Dahua `DH-IPC-HDBW5541R-ASE`
+- WLanguage orientado a objetos
+- Exportación opcional a JSON local (`C:\Temp`)
 
 ---
 
@@ -24,11 +24,15 @@ Obtener estadísticas en tiempo real (entradas, salidas y personas presentes) de
 
 ```
 DahuaClient/
-├── DahuaAPIClient.wdc          # Clase principal de integración
-├── Inicio.wdw                  # Ventana para ingresar IP y usuario
-├── LICENSE
-├── README.md
-├── Documentación_DahuaClient.pdf
+├── DahuaAPIClient.wdc             # Clase principal
+├── Inicio.wdw                     # Ventana de prueba
+├── LICENSE                        # MIT License
+├── README.md                      # Este archivo
+├── CONTRIBUTING.md                # Guía de contribuciones
+├── CODE_OF_CONDUCT.md             # Código de conducta
+├── .gitignore                     # Ignora carpetas temporales WinDev
+├── DahuaAPI.pdf                   # Documentación original de la API
+├── Documentación_DahuaClient.pdf # Manual técnico del proyecto
 └── ...
 ```
 
@@ -45,76 +49,79 @@ Trace("Personas actualmente dentro: " + stResumen.PersonasAdentro)
 
 ---
 
-## 📊 Estructura de datos `stSummary`
+## 📊 Estructura `stSummary`
 
-| Campo              | Descripción                                      |
-|-------------------|--------------------------------------------------|
-| Channel            | Canal de video                                    |
-| RuleName           | Tipo de regla (ej: `"NumberStat"`)               |
-| TotalEntradas      | Total de personas que ingresaron históricamente  |
-| EntradasHoy        | Entradas en el día actual                        |
-| EntradasEstaHora   | Entradas en la hora actual                       |
-| TotalSalidas       | Total de salidas históricas                      |
-| SalidasHoy         | Salidas del día actual                           |
-| SalidasEstaHora    | Salidas en la hora actual                        |
-| PersonasAdentro    | Personas detectadas actualmente en el área       |
+| Campo             | Descripción                                     |
+|------------------|-------------------------------------------------|
+| Channel           | Canal de video                                 |
+| RuleName          | Tipo de conteo ("NumberStat")                  |
+| TotalEntradas     | Ingresos acumulados                            |
+| EntradasHoy       | Ingresos en el día actual                      |
+| EntradasEstaHora  | Ingresos en la hora actual                     |
+| TotalSalidas      | Salidas acumuladas                             |
+| SalidasHoy        | Salidas en el día actual                       |
+| SalidasEstaHora   | Salidas en la hora actual                      |
+| PersonasAdentro   | Personas actualmente dentro del área definida  |
 
 ---
 
-## 🔐 Requisitos para autenticación
+## 🔐 Autenticación
 
-La cámara requiere **Digest Authentication** según RFC 7616.
-
-En `WinDev 2025 SaaS Update 3`, se habilita mediante:
+La cámara exige **Digest Authentication**, por lo que se utiliza:
 
 ```wlanguage
 myRequest.Authentication = auDigest
 ```
 
-El método `GetSummary()` configura automáticamente el objeto `httpRequest` con esta opción.
+Este modo solo está disponible desde **WinDev 2025 SaaS Update 3**.
 
 ---
 
-## 📁 Guardado de datos JSON (opcional)
+## 🗃 Guardado de JSON (opcional)
 
-Si `bSaveJSON = True`, los datos obtenidos se guardan en:
+Si el segundo parámetro de `GetSummary()` es `True`, se genera un archivo JSON en:
 
 ```
 C:\Temp\dahua_summary_canalX_YYYYMMDD_HHMMSS.json
 ```
 
-Incluye:
+---
 
-- Timestamp
-- IP
-- Canal
-- Totales de entradas/salidas
-- Personas adentro
+## 📌 Notas
+
+- Por ahora solo se implementa `getSummary`.
+- Se puede extender fácilmente a `startFind`, `getDetail`, etc.
+- Requiere que el directorio `C:\Temp` exista.
 
 ---
 
-## 📌 Observaciones
+## 📚 Documentación incluida
 
-- Actualmente solo implementa `getSummary`, pero está diseñada para ampliarse fácilmente.
-- Requiere que `C:\Temp` exista para guardar los archivos JSON.
-- Soporta múltiples canales (argumento en `GetSummary()`).
-
----
-
-## 📄 Documentación incluida
-
-- `Documentación_DahuaClient.pdf`: detalles del diseño de clases, interfaz WinDev, parsing, guardado y arquitectura del proyecto.
+- `Documentación_DahuaClient.pdf`: explica la arquitectura del cliente, estructura de datos, ejemplo de uso y diseño en WinDev.
+- `DahuaAPI.pdf`: documentación oficial de la API CGI Dahua, con parámetros y ejemplos de autenticación Digest (RFC 7616).
 
 ---
 
-## 🤝 Autor
+## 🧑‍💻 Autor y comunidad
 
-Desarrollado por **Juan Barbat (InnIT)**
-🌐 https://innit.com.uy
-💬 Comunidad: [Discord HolaWindev](https://discord.gg/9xDAJ6ugQr)
+Proyecto creado por **Juan Barbat** para la comunidad **HolaWindev**
+🔗 https://barbat.dev
+💬 [Discord HolaWindev](https://discord.gg/9xDAJ6ugQr)
 
 ---
 
-## 🛡️ Licencia
+## 📜 Licencia
 
-Este proyecto es de uso privado. La integración con cámaras Dahua no está oficialmente soportada por el fabricante. Usar bajo tu propio criterio y respetando las condiciones del entorno donde se implemente.
+Este proyecto se distribuye bajo licencia [MIT](LICENSE).
+
+> ⚠️ *Nota:* Esta integración fue realizada de forma independiente a partir de documentación técnica interna.
+> Algunas funciones pueden variar según el modelo, firmware o configuración local de la cámara Dahua.
+
+---
+
+## 🤝 ¿Querés colaborar?
+
+Contribuciones, sugerencias y mejoras son bienvenidas.
+Revisá el [CONTRIBUTING.md](CONTRIBUTING.md) y el [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) antes de empezar.
+
+---
