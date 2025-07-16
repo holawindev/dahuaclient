@@ -29,12 +29,6 @@ project :
   identifier : 0x48780dd10389e64b
   elements :
    -
-     name : ProcedimientosGlobales
-     identifier : 0x48781ba004abd646
-     internal_properties : HwAAAB4AAAAt5TEYcGUXmJywnW/TW42Ni8stvuxSA5vU6BbYVSc+hyEcRbpowPeaspek2uzIKbwg9HYrKnChk+AeKg==
-     physical_name : .\ProcedimientosGlobales.wdg
-     type : 7
-   -
      name : Inicio
      identifier : 0x4878196103f70f15
      internal_properties : HwAAAB4AAAD7tw8CfhPltqaGk02JIeujt4kP2PGwg+WKmMjMyVuGZnLX8nNh1dtmulPS9MbuA5oe6nwVPGabje7seA==
