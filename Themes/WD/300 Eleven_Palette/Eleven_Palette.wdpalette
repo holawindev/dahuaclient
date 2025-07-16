@@ -1,0 +1,113 @@
+// Eleven_Palette
+// version 0.1
+// Light theme
+{
+// primaire / couleur du theme
+    "primary"					:"#00B7C3", 							// couleur principale d'accentuation, habituellement une 
+																		// couleur marquée qui donne le look général de l'UI
+
+    "primary_text"				:"#FFFFFF", 							// couleur du texte devant être visible sur un fond "primary"
+
+    "primary_border"			:"=primary", 							// couleur de bordure, si le fond "primary" n'est pas assez accentuée
+																		// par rapport au fond "windows_background"/"container_background"
+
+    "primary_red_background"	:"#DB2635", 							// couleur de fond/élément rouge devant être suffisamment contrastée pour 
+																		// qu'un texte de couleur "primary_text" soit lisible
+
+
+// couleur de base d'UI
+    "secondary"					:"#FDFDFD", 							// couleur secondaire, habituellement plus légère ou proche du fond
+
+    "text"						:"#000000", 							// couleur de texte principal : doit être lisible sur tous 
+																		// les fond : "secondary", "windows_background", "container_background",
+																		// "input_background", ...
+
+    "border"					:"#D2D2D2", 							// couleur de bordure : doit permettre de détacher un champ ayant un fond 
+																		// "secondary" superposé à un fond "windows_background"/"container_background"
+
+// fonds	
+    "window_background"			:"#F5F5F5", 							// fond de fenêtre / ligne paire/impaire de liste, table
+
+    "container_background"		:"#FFFFFF", 							// fond des champs n'affichant pas de données ou servant de conteneur 
+																		// à d'autre champ (cellule, onglets, ...)
+
+    "input_background"			:"=container_background", 				// fond de champ affichant une données (saisie, ligne de liste/table)
+
+
+// Effets sur boutons
+    "pressed_mix"				:"#00000014", 							// couleur + alpha combinée à la couleur de repos des boutons lorsqu'ils
+																		// sont pressés (donnera l'effet d'enfoncé)
+
+    "hovered_mix"				:"#0000000A", 							// couleur + alpha combinée à la couleur de repos des boutons lorsqu'ils 
+																		// sont survolés (donnera l'effet de survol)
+
+    "grayed_mix"				:"#FFFFFF73", 							// couleur + alpha combinée à la couleur de repos des boutons lorsqu'ils 
+																		// sont grisés
+
+
+// cadre de focus
+    "focus_outline"				:"=BGOK(window_background)", 			// couleur du cadre de focus (si utilisé par le gabarit)
+
+
+// autres effets
+    "accent_background"			:"=MIX(window_background,text,10)", 	// couleur utilisé en fond support de champ : fond de potentiomètre,
+																		// fond de jauge, ... une couleur "text" doit être lisible
+
+    "text_light"				:"=MIX(input_background,text,45)", 		// couleur de texte d'indication ou libellés informatifs
+	
+    "border_strong"				:"=MIX(border,text,30)", 				// couleur de bordure plus "accentuée" (splitter / barre de temps)
+
+    "primary_dark"				:"=MIX(primary,#000000,20)", 			// couleur "primary" plus foncée (libellé/forme avec style "sombre")
+
+
+// bandeau de selection et survol	
+    "selected_background"		:"=MIX(primary,#FFFFFF,70)",			// couleur de fond des bandeaux de sélection
+
+    "selected_text"				:"=TEXTOK(selected_background)",		// couleur du texte lisible sur un fond "selected_background"
+
+    "hovered_background"		:"=MIX(window_background,primary,10)",	// couleur de survol d'élement sélectionnable  
+																		// (ligne de liste, table, zone répétées,...)
+
+	
+// autres textes
+    "windows_title_text"		:"#5F6368", 							// couleur de libellé spécifique "titre de fenêtres"
+	
+    "title_text"				:"=text", 								// couleur de libellé spécifique "titre" / couleur d'entêtes de
+																		// certains champs
+
+    "subtitle_text"				:"=title_text", 						// couleur de libellé spécifique de sous titre
+
+    "section_text"				:"=MIX(primary,text,30)", 				// couleur de libellé spécifique de section
+
+    "red_text"					:"=primary_red_background", 			// couleur de libellé/cadre rouge : doit être lisible sur les fonds 
+																		// windows_background, container_background
+
+    "gray_text"					:"#808080", 							// couleur de libellé/cadre gris : doit être lisible sur les fonds 
+																		// windows_background, container_background
+    "link_text"					:"=primary", 							// couleur des boutons/libellé liens
+
+// negative
+    "negative_text"				:"=TEXTOK(text)", 						// couleur negative du texte, doit être compatible avec le 
+																		// fond negative_background, utilisée dans les styles dit "negatifs"
+
+    "negative_background"		:"=BGOK(negative_text)", 				// couleur neagtive de fond, utilisée dans les styles dit "negatifs"
+
+        // Grisés
+    "disabled_text"				:"#FFFFFF",
+	"disabled_bkg_text"			:"#696969",
+
+
+    "graph_series_1": "=primary",
+    "graph_series_2": "=SERIES(2)",
+    "graph_series_3": "=SERIES(3)",
+    "graph_series_4": "=SERIES(4)",
+    "graph_series_5": "=SERIES(5)",
+    "graph_series_6": "=SERIES(6)",
+    "graph_series_7": "=SERIES(7)",
+    "graph_series_8": "=SERIES(8)",
+    "graph_series_9": "=SERIES(9)",
+    "graph_series_10": "=SERIES(10)",
+    "graph_series_11": "=SERIES(11)",
+}
+
+
