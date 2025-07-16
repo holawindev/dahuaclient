@@ -45,6 +45,10 @@ project :
      physical_name : .\LICENSE
    -
      physical_name : .\README.md
+   -
+     physical_name : .\Documentación_DahuaClient.pdf
+   -
+     physical_name : .\CONTRIBUTING.md
   array_of_analysis : []
   net_assemblies : []
   uwp_api : []
