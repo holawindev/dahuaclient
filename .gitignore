@@ -1,14 +1,16 @@
 # .gitignore for WINDEV, WEBDEV and WINDEV Mobile projects
-#
-# WINDEV – WEBDEV – WINDEV Mobile
-Backup
-Bin
-cache.gestion de sources
-Corbeille
-Groupware
-Lastsave
-Sauvegarde
-.tmp
+
+# Carpetas de sistema y backups
+Backup/
+Bin/
+Lastsave/
+Sauvegarde/
+Groupware/
+Corbeille/
+cache.gestion de sources/
+.tmp/
+
+# Archivos temporales y generados
 *.cache
 *.cpl
 *.env
@@ -17,12 +19,22 @@ Sauvegarde
 *.wdcoverage
 *.wpf
 HstDuree.log
-#
-#WEBDEV
-*\res
+
+# WinDev análisis y otros
+*.ana
+*.log
+*.idx
+
+# WEBDEV
+*\res/
 *.awl
 *.awp
-#
-# WINDEV Mobile 
-android
+
+# WINDEV Mobile
+android/
 *.xcode.gen
+
+# Carpetas opcionales del desarrollador
+.vscode/
+.idea/
+*.bak
