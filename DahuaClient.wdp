@@ -31,6 +31,8 @@ project :
   other_elements :
    -
      physical_name : .\LICENSE
+   -
+     physical_name : .\README.md
   array_of_analysis : []
   net_assemblies : []
   uwp_api : []
