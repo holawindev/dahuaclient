@@ -104,8 +104,8 @@ C:\Temp\dahua_summary_canalX_YYYYMMDD_HHMMSS.json
 
 ## 🧑‍💻 Autor y comunidad
 
-Proyecto creado por **Juan Barbat** para la comunidad **HolaWindev**
-🔗 https://barbat.dev
+Proyecto creado para la comunidad **HolaWindev**
+🔗 https://holawindev.com
 💬 [Discord HolaWindev](https://discord.gg/9xDAJ6ugQr)
 
 ---

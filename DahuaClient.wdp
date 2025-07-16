@@ -53,6 +53,8 @@ project :
      physical_name : .\CONTRIBUTING.md
    -
      physical_name : .\CODE_OF_CONDUCT.md
+   -
+     physical_name : .\DahuaAPI.pdf
   array_of_analysis : []
   net_assemblies : []
   uwp_api : []
