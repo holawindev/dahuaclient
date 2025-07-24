@@ -77,6 +77,19 @@ Este modo solo está disponible desde **WinDev 2025 SaaS Update 3**.
 
 ---
 
+## 🔑 Clave de la bóveda
+
+Este proyecto utiliza una bóveda interna para guardar credenciales (como usuario, contraseña o IP de la cámara).  
+La clave por defecto utilizada para acceder a esos valores encriptados es:
+
+```
+HolaWindev
+```
+
+Esta clave puede modificarse fácilmente desde el código o parametrizarse según el entorno de ejecución.
+
+---
+
 ## 🗃 Guardado de JSON (opcional)
 
 Si el segundo parámetro de `GetSummary()` es `True`, se genera un archivo JSON en:
